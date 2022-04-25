@@ -1,6 +1,8 @@
 import os
 import logging
 
+from importlib_metadata import version
+
 class command:
     asm_command : str
     actuall_command : int
@@ -26,6 +28,18 @@ class compiler:
     
     CMP_errors = []
     
+    DEFAULT_COMPILER_SETTINGS = {
+        "commentKey": "&&",
+        "compilerVersion":"latest",
+        
+    }
+    
+    compilerSettings = {
+        "commentKey": "&&",
+        "compilerVersion":"latest",
+        
+    }
+    
     commandLibary = {}
     compilerCommmands = {}
 
@@ -40,16 +54,24 @@ class compiler:
         if commandName in self.commandLibary:
             del self.commandLibary[commandName]
     
-    def compile(self, path, whereTo, version=1):
+    def compile(self, path, whereTo):
+        version = self.compilerSettings["compilerVersion"]
         with open(path) as file:
             self._scan(file, version)
     
     def _scan(self, file, version):
         lineNum = 0
-        scan = ""
+        
         for line in file.readlines():
             lineNum += 1
-            print(line.split())
+            
+            lineSegments = line.split()
+            print(lineSegments)
+            
+            if lineSegments[0] != self.compilerSettings["commentKey"] and lineSegments[0] in self.commandLibary:
+                pass
+            
+                        
             
 
 
@@ -80,7 +102,7 @@ def main():
     
     #print(comp.commandLibary)
     
-    comp.compile("H:\Python Code Compiler Project\smltest.asm", "cmp.nums")
+    comp.compile("smltest.asm", "compile.smc")
 
 if __name__ == "__main__":
     main()
